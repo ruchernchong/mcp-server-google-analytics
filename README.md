@@ -1,5 +1,7 @@
 # Google Analytics MCP Server
 
+[![smithery badge](https://smithery.ai/badge/mcp-server-google-analytics)](https://smithery.ai/server/mcp-server-google-analytics)
+
 An MCP server implementation for accessing Google Analytics 4 (GA4) data, built using the Model Context Protocol
 TypeScript SDK.
 
@@ -33,6 +35,15 @@ export GA_PROPERTY_ID="your-ga4-property-id"
 
 ## Installation
 
+### Installing via Smithery
+
+To install Google Analytics Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/mcp-server-google-analytics):
+
+```bash
+npx -y @smithery/cli install mcp-server-google-analytics --client claude
+```
+
+### Manual Installation
 ```bash
 pnpm install mcp-server-google-analytics
 ```
