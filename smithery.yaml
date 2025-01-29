@@ -1,0 +1,25 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - googleClientEmail
+      - googlePrivateKey
+      - gaPropertyId
+    properties:
+      googleClientEmail:
+        type: string
+        description: The client email of the service account for Google Analytics.
+      googlePrivateKey:
+        type: string
+        description: The private key of the service account for Google Analytics.
+      gaPropertyId:
+        type: string
+        description: The Google Analytics 4 property ID.
+  commandFunction:
+    # A function that produces the CLI command to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'node', args: ['dist/index.js'], env: { GOOGLE_CLIENT_EMAIL: config.googleClientEmail, GOOGLE_PRIVATE_KEY: config.googlePrivateKey, GA_PROPERTY_ID: config.gaPropertyId } })
