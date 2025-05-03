@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/ruchernchong-mcp-server-google-analytics-badge.png)](https://mseep.ai/app/ruchernchong-mcp-server-google-analytics)
+
 # Google Analytics MCP Server
 
 [![smithery badge](https://smithery.ai/badge/mcp-server-google-analytics)](https://smithery.ai/server/mcp-server-google-analytics)
