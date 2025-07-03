@@ -9,6 +9,10 @@ function validateDateFormat(date: string): boolean {
   }
 
   const parsedDate = new Date(date);
+  if (Number.isNaN(parsedDate.getTime())) {
+    return false;
+  }
+
   return parsedDate.toISOString().split("T")[0] === date;
 }
 
