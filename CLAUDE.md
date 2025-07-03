@@ -10,8 +10,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `pnpm start` - Start the compiled server from `dist/index.js`
 
 ### Testing
-- `pnpm test` - Run Jest tests from the `tests/` directory
-- Tests are configured with ts-jest and target Node.js environment
+- `pnpm test` - Run Vitest tests from the `tests/` directory
+- Tests are configured with Vitest and target Node.js environment
 
 ### Code Quality
 - `pnpm lint` - Run Biome linter on `src/` directory
@@ -74,7 +74,7 @@ The server requires these environment variables:
 - Import organization enabled
 
 ### Testing Setup
-- Jest with ts-jest preset
+- Vitest with TypeScript support
 - Tests in dedicated `tests/` directory
-- Coverage reporting configured for `src/` files
+- Coverage reporting configured for `src/` files with v8 provider
 - Node.js test environment
