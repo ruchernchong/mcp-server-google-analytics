@@ -88,10 +88,83 @@ const server = new Server(
   },
 );
 
+// Validate and fetch analytics data
+async function fetchAnalyticsData(
+  reportConfig: Omit<RunReportRequest, "property">,
+) {
+  try {
+    const [response] = await analyticsDataClient.runReport({
+      property: `properties/${propertyId}`,
+      ...reportConfig,
+    });
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(response, null, 2),
+        },
+      ],
+    };
+  } catch (error) {
+    // Handle Google Analytics API errors
+    if (error instanceof Error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Google Analytics API error: ${error.message}`,
+      );
+    }
+    throw new McpError(ErrorCode.InternalError, "An unexpected error occurred");
+  }
+}
+
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [
+      {
+        name: "runReport",
+        description: "Run a report to get analytics data",
+        inputSchema: {
+          type: "object",
+          properties: {
+            startDate: {
+              type: "string",
+              description: "Start date in YYYY-MM-DD format",
+            },
+            endDate: {
+              type: "string",
+              description: "End date in YYYY-MM-DD format",
+            },
+            dimensions: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                },
+                required: ["name"],
+              },
+              description: "Dimensions to group by (e.g., page, country)",
+            },
+            metrics: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                },
+                required: ["name"],
+              },
+              description: "Metrics to include in the report",
+            },
+            dimensionFilter: {
+              type: "object",
+              description: "Filter for dimensions",
+            },
+          },
+          required: ["startDate", "endDate", "metrics", "dimensions"],
+        },
+      },
       {
         name: "getPageViews",
         description: "Get page view metrics for a specific date range",
@@ -184,6 +257,30 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     switch (name) {
+      case "runReport": {
+        const {
+          startDate,
+          endDate,
+          dimensions = [],
+          metrics = [],
+          dimensionFilter,
+        } = args as {
+          startDate: string;
+          endDate: string;
+          dimensions?: { name: string }[];
+          metrics?: { name: string }[];
+          dimensionFilter?: object;
+        };
+
+        validateDateRange(startDate, endDate);
+
+        return fetchAnalyticsData({
+          dateRanges: [{ startDate, endDate }],
+          dimensions,
+          metrics,
+          ...(dimensionFilter && { dimensionFilter }),
+        });
+      }
       case "getPageViews": {
         const {
           startDate,
@@ -197,21 +294,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         validateDateRange(startDate, endDate);
 
-        const [response] = await analyticsDataClient.runReport({
-          property: `properties/${propertyId}`,
+        return fetchAnalyticsData({
           dateRanges: [{ startDate, endDate }],
           dimensions: dimensions.map((dimension) => ({ name: dimension })),
           metrics: [{ name: "screenPageViews" }],
         });
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(response, null, 2),
-            },
-          ],
-        };
       }
 
       case "getActiveUsers": {
@@ -222,21 +309,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         validateDateRange(startDate, endDate);
 
-        const [response] = await analyticsDataClient.runReport({
-          property: `properties/${propertyId}`,
+        return fetchAnalyticsData({
           dateRanges: [{ startDate, endDate }],
           metrics: [{ name: "activeUsers" }, { name: "newUsers" }],
           dimensions: [{ name: "date" }],
         });
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(response, null, 2),
-            },
-          ],
-        };
       }
 
       case "getEvents": {
@@ -248,8 +325,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         validateDateRange(startDate, endDate);
 
-        const [response] = await analyticsDataClient.runReport({
-          property: `properties/${propertyId}`,
+        return fetchAnalyticsData({
           dateRanges: [{ startDate, endDate }],
           dimensions: [{ name: "eventName" }, { name: "date" }],
           metrics: [{ name: "eventCount" }],
@@ -262,15 +338,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             },
           }),
         });
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(response, null, 2),
-            },
-          ],
-        };
       }
 
       case "getUserBehavior": {
@@ -281,8 +348,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         validateDateRange(startDate, endDate);
 
-        const [response] = await analyticsDataClient.runReport({
-          property: `properties/${propertyId}`,
+        return fetchAnalyticsData({
           dateRanges: [{ startDate, endDate }],
           metrics: [
             { name: "averageSessionDuration" },
@@ -291,15 +357,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           ],
           dimensions: [{ name: "date" }],
         });
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(response, null, 2),
-            },
-          ],
-        };
       }
 
       default:
@@ -308,14 +365,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   } catch (error) {
     if (error instanceof McpError) {
       throw error;
-    }
-
-    // Handle Google Analytics API errors
-    if (error instanceof Error) {
-      throw new McpError(
-        ErrorCode.InternalError,
-        `Google Analytics API error: ${error.message}`,
-      );
     }
 
     throw new McpError(ErrorCode.InternalError, "An unexpected error occurred");
