@@ -1,3 +1,5 @@
+import { BetaAnalyticsDataClient } from "@google-analytics/data";
+import { google } from "@google-analytics/data/build/protos/protos";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -6,7 +8,8 @@ import {
   ListToolsRequestSchema,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
-import { BetaAnalyticsDataClient } from "@google-analytics/data";
+
+import RunReportRequest = google.analytics.data.v1beta.RunReportRequest;
 
 // Validate environment variables
 function validateEnvironment(): void {
@@ -68,12 +71,12 @@ validateEnvironment();
 // Initialize the Google Analytics Data client
 const analyticsDataClient = new BetaAnalyticsDataClient({
   credentials: {
-    client_email: process.env.GOOGLE_CLIENT_EMAIL!,
-    private_key: process.env.GOOGLE_PRIVATE_KEY!.replace(/\\n/g, "\n"),
+    client_email: process.env.GOOGLE_CLIENT_EMAIL as string,
+    private_key: process.env.GOOGLE_PRIVATE_KEY as string,
   },
 });
 
-const propertyId = process.env.GA_PROPERTY_ID!;
+const propertyId = process.env.GA_PROPERTY_ID as string;
 
 // Create the server
 const server = new Server(
@@ -90,7 +93,11 @@ const server = new Server(
 
 // Validate and fetch analytics data
 async function fetchAnalyticsData(
-  reportConfig: Omit<RunReportRequest, "property">,
+  reportConfig: Partial<Omit<RunReportRequest, "property">> & {
+    dateRanges: RunReportRequest["dateRanges"];
+    dimensions?: RunReportRequest["dimensions"];
+    metrics?: RunReportRequest["metrics"];
+  },
 ) {
   try {
     const [response] = await analyticsDataClient.runReport({

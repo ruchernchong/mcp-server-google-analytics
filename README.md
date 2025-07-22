@@ -85,7 +85,12 @@ npx -y @smithery/cli install mcp-server-google-analytics --client claude
 
 ### Manual Installation
 ```bash
-pnpm install mcp-server-google-analytics
+npm install -g mcp-server-google-analytics
+```
+
+Or use with npx directly:
+```bash
+npx mcp-server-google-analytics
 ```
 
 ## Usage

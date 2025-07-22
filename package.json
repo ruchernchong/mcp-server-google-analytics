@@ -10,7 +10,8 @@
     "test": "vitest",
     "lint": "biome lint src/",
     "format": "biome format src/ --write",
-    "check": "biome check src/ --apply"
+    "check": "biome check src/ --apply",
+    "prepare": "husky"
   },
   "dependencies": {
     "@google-analytics/data": "^4.0.0",
@@ -19,7 +20,17 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.3",
+    "@semantic-release/npm": "^12.0.2",
     "@types/node": "^20.0.0",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7",
+    "semantic-release": "^24.2.7",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.0",
     "vitest": "^2.0.0"
@@ -35,5 +46,16 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ruchernchong/mcp-server-google-analytics"
+  },
+  "bin": {
+    "mcp-server-google-analytics": "./dist/index.js"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }
