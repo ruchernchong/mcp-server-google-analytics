@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
 import { google } from "@google-analytics/data/build/protos/protos";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
