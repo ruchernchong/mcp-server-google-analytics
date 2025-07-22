@@ -9,6 +9,7 @@ import {
   ListToolsRequestSchema,
   McpError,
 } from "@modelcontextprotocol/sdk/types.js";
+import "dotenv/config";
 
 import RunReportRequest = google.analytics.data.v1beta.RunReportRequest;
 

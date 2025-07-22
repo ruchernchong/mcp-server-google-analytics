@@ -16,6 +16,7 @@
   "dependencies": {
     "@google-analytics/data": "^4.0.0",
     "@modelcontextprotocol/sdk": "^1.0.1",
+    "dotenv": "^17.2.0",
     "googleapis": "^126.0.1"
   },
   "devDependencies": {
