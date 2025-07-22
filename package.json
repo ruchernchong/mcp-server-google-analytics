@@ -1,6 +1,6 @@
 {
   "name": "mcp-server-google-analytics",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Google Analytics MCP server for accessing web analytics data",
   "main": "dist/index.js",
   "scripts": {
