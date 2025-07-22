@@ -34,12 +34,13 @@ This is a Model Context Protocol (MCP) server that provides Google Analytics 4 d
 - Environment variable validation on startup
 
 ### Tool Implementation
-The server exposes 4 main tools through the MCP protocol:
+The server exposes 5 main tools through the MCP protocol:
 
-1. **getPageViews** - Page view metrics with optional dimensions
-2. **getActiveUsers** - Active and new user counts over time
-3. **getEvents** - Event tracking with optional event name filtering
-4. **getUserBehavior** - Session duration, bounce rate, and sessions per user
+1. **runReport** - Generic analytics report runner with custom dimensions and metrics
+2. **getPageViews** - Page view metrics with optional dimensions
+3. **getActiveUsers** - Active and new user counts over time
+4. **getEvents** - Event tracking with optional event name filtering
+5. **getUserBehavior** - Session duration, bounce rate, and sessions per user
 
 Each tool follows the pattern:
 - Date range validation (YYYY-MM-DD format)
