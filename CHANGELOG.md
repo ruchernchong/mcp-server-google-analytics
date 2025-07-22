@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ruchernchong/mcp-server-google-analytics/compare/v1.0.2...v1.1.0) (2025-07-22)
+
+
+### Features
+
+* add dotenv support for environment variables ([74e9df5](https://github.com/ruchernchong/mcp-server-google-analytics/commit/74e9df5836db2b7addd0d520718673e20252959a)), closes [#10](https://github.com/ruchernchong/mcp-server-google-analytics/issues/10)
+
 ## [1.0.2](https://github.com/ruchernchong/mcp-server-google-analytics/compare/v1.0.1...v1.0.2) (2025-07-22)
 
 
