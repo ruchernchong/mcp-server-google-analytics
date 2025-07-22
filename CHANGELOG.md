@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/ruchernchong/mcp-server-google-analytics/compare/v1.0.0...v1.0.1) (2025-07-22)
+
+
+### Bug Fixes
+
+* update version to resolve npm publishing conflict ([67ae734](https://github.com/ruchernchong/mcp-server-google-analytics/commit/67ae734e27b317458a4ea329e5887cd23607c784))
+
 # 1.0.0 (2025-07-22)
 
 
